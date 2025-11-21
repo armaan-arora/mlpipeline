@@ -1,343 +1,357 @@
-# **🚀 End-to-End CI/CD Pipeline for Node.js App Deployment on EKS using GitHub Actions**  
+# 🤖 ML Pipeline
 
-![eksbanner](https://imgur.com/h87KAuY.png)
+<p align="center">
+  <img src="https://img.shields.io/badge/Python-3.9+-3776AB?style=for-the-badge&logo=python&logoColor=white" alt="Python"/>
+  <img src="https://img.shields.io/badge/Status-Active-brightgreen?style=for-the-badge" alt="Status"/>
+  <img src="https://img.shields.io/badge/License-MIT-blue?style=for-the-badge" alt="License"/>
+  <img src="https://img.shields.io/badge/MLOps-Production_Ready-orange?style=for-the-badge" alt="MLOps"/>
+</p>
 
----
-
-![CI/CD Pipeline](https://imgur.com/Ctznv2m.png)  
-
-## **📌 Table of Contents**  
-
-- [**🚀 End-to-End CI/CD Pipeline for Node.js App Deployment on EKS using GitHub Actions**](#-end-to-end-cicd-pipeline-for-nodejs-app-deployment-on-eks-using-github-actions)
-  - [**📌 Table of Contents**](#-table-of-contents)
-  - [**📂 Repository Structure**](#-repository-structure)
-  - [**🔧 Prerequisites**](#-prerequisites)
-  - [**⚙️ CI/CD Workflow**](#️-cicd-workflow)
-    - [**🔨 Build Job**](#-build-job)
-    - [**🚀 Deployment Job**](#-deployment-job)
-  - [**🏗️ Infrastructure Details**](#️-infrastructure-details)
-  - [**📦 Application Deployment Strategy**](#-application-deployment-strategy)
-  - [**🔄 GitOps Principles**](#-gitops-principles)
-  - [**🔒 Security Best Practices**](#-security-best-practices)
-  - [**📢 Notifications \& Alerts**](#-notifications--alerts)
-  - [**📊 Monitoring \& Logging**](#-monitoring--logging)
-  - [**📜 Contributing**](#-contributing)
-  - [**⭐ Support \& Author**](#-support--author)
-  - [**⭐ Hit the Star!**](#-hit-the-star)
-  - [🛠️ **Author \& Community**](#️-author--community)
-  - [📧 **Let's Connect!**](#-lets-connect)
-  - [📢 **Stay Updated!**](#-stay-updated)
+<p align="center">
+  <b>An end-to-end Machine Learning pipeline for building, training, and deploying ML models at scale 🚀</b>
+</p>
 
 ---
 
-## **📂 Repository Structure**  
+## 📋 Table of Contents
 
-The repository is structured for **modularity and maintainability**:
+- [Problem Statement](#-problem-statement)
+- [Solution](#-solution)
+- [Features](#-features)
+- [Architecture](#-architecture)
+- [Tech Stack](#-tech-stack)
+- [Tools Used](#-tools-used)
+- [Installation](#-installation)
+- [Usage](#-usage)
+- [Project Structure](#-project-structure)
+- [Future Scope](#-future-scope)
+- [Contributing](#-contributing)
+- [License](#-license)
 
-```tree
-📂 root  
-├── 📂 .github/workflows/      # GitHub Actions CI/CD workflows
-│   ├── ci.yml                 # Continuous Integration pipeline
-│   └── cd.yml                 # Continuous Deployment pipeline
-│
-├── 📂 app                     # Application source code  
-│   ├── app.py                 # Python application logic (Flask)  
-│   ├── calculator.js          # Business logic for calculations  
-│   ├── calculator.test.js     # Unit tests for calculator functions  
-│   ├── Dockerfile             # Optimized Dockerfile for Node.js app  
-│   ├── Dockerfile-python      # Dockerfile for Python Flask version  
-│   ├── index.js               # Main entry point of the Node.js application  
-│   ├── package.json           # Project dependencies and scripts  
-│   └── requirements.txt       # Python dependencies  
-│  
-├── 📂 kustomize               # Kubernetes manifests managed with Kustomize  
-│   ├── 📂 base                # Base configurations common for all environments  
-│   │   ├── deploy.yaml        # Enhanced deployment with health checks & security  
-│   │   ├── ingress.yaml       # Ingress configuration for routing traffic  
-│   │   ├── kustomization.yaml # Kustomize configuration file  
-│   │   └── svc.yaml           # Kubernetes Service definition  
-│   │  
-│   ├── 📂 overlays            # Environment-specific configurations  
-│   │   ├── 📂 dev             # Dev environment-specific Kustomize configs  
-│   │   │   ├── deploy-dev.yaml        # Dev-specific deployment file  
-│   │   │   ├── ingress-dev.yaml       # Dev-specific ingress settings  
-│   │   │   ├── kustomization.yaml     # Kustomize configuration for Dev  
-│   │   │   └── svc-dev.yaml           # Dev-specific service settings  
-│   │   │  
-│   │   ├── 📂 prod            # Production environment-specific Kustomize configs  
-│   │   │   ├── deploy-prod.yaml       # Production-specific deployment file  
-│   │   │   ├── ingress-prod.yaml      # Production-specific ingress settings  
-│   │   │   ├── kustomization.yaml     # Kustomize configuration for Prod  
-│   │   │   └── svc-prod.yaml          # Production-specific service settings  
-│   │   │  
-│   │   ├── 📂 staging         # Staging environment-specific Kustomize configs  
-│   │   │   ├── deploy-staging.yaml    # Staging-specific deployment file  
-│   │   │   ├── ingress-staging.yaml   # Staging-specific ingress settings  
-│   │   │   ├── kustomization.yaml     # Kustomize configuration for Staging  
-│   │   │   └── svc-staging.yaml       # Staging-specific service settings  
-│  
-├── 📂 terraform               # Terraform configuration for infrastructure provisioning  
-│   ├── ingress-nginx.tf       # Terraform script for setting up NGINX Ingress  
-│   ├── main.tf                # Main Terraform file defining AWS infrastructure  
-│   ├── outputs.tf             # Defines Terraform outputs (e.g., cluster endpoints)  
-│   ├── terraform.tf           # Backend configuration for Terraform state management  
-│   └── variables.tf           # Input variables for Terraform modules  
-│  
-├── .eslintrc.js               # ESLint configuration for code quality  
-├── .gitignore                 # Comprehensive gitignore file  
-├── docker-compose.yml         # Local development environment  
-├── nginx.conf                 # Nginx configuration for local development  
-├── README.md                  # Project documentation and setup guide  
-└── VERSION                    # Tracks application versioning (Semantic Versioning)  
+---
+
+## ❓ Problem Statement
+
+Building production-ready machine learning systems presents significant challenges that go far beyond model training:
+
+- 🔄 **Reproducibility Issues** — Experiments are hard to track and reproduce across different environments
+- 📊 **Data Management** — Handling large datasets, versioning, and ensuring data quality is complex
+- ⚙️ **Pipeline Fragmentation** — Data preprocessing, training, and deployment often exist as disconnected scripts
+- 🐛 **Debugging Difficulty** — Identifying issues in ML workflows is time-consuming without proper logging
+- 📉 **Model Drift** — Deployed models degrade over time without continuous monitoring
+- 🚀 **Deployment Bottlenecks** — Moving from notebooks to production requires significant engineering effort
+- 🔁 **Manual Processes** — Retraining and redeployment are often manual, error-prone tasks
+
+---
+
+## 💡 Solution
+
+**ML Pipeline** is a modular, production-grade framework that automates the entire machine learning lifecycle — from raw data to deployed model.
+
+### Pipeline Workflow
+
+```
+┌─────────────┐    ┌─────────────┐    ┌─────────────┐    ┌─────────────┐    ┌─────────────┐
+│   📥 Data   │───▶│  🔧 Data    │───▶│  🏋️ Model  │───▶│  📊 Model   │───▶│  🚀 Model   │
+│  Ingestion  │    │ Processing  │    │  Training   │    │ Evaluation  │    │ Deployment  │
+└─────────────┘    └─────────────┘    └─────────────┘    └─────────────┘    └─────────────┘
+       │                  │                  │                  │                  │
+       ▼                  ▼                  ▼                  ▼                  ▼
+  ┌─────────────────────────────────────────────────────────────────────────────────────┐
+  │                        📝 Experiment Tracking & Logging (MLflow)                    │
+  └─────────────────────────────────────────────────────────────────────────────────────┘
+```
+
+### Key Benefits
+
+✅ **Automated Workflows** — End-to-end automation from data ingestion to deployment  
+✅ **Reproducibility** — Every experiment is tracked, versioned, and reproducible  
+✅ **Modular Design** — Easily swap components without breaking the pipeline  
+✅ **Scalable** — Handles datasets from KBs to TBs seamlessly  
+✅ **Production Ready** — Built with CI/CD, monitoring, and best practices  
+✅ **Framework Agnostic** — Works with Scikit-learn, TensorFlow, PyTorch, and more  
+
+---
+
+## ✨ Features
+
+| Feature | Description |
+|---------|-------------|
+| 📥 **Data Ingestion** | Automated data collection from multiple sources (CSV, API, databases) |
+| ✅ **Data Validation** | Schema validation and data quality checks |
+| 🔄 **Data Transformation** | Feature engineering, scaling, encoding, and preprocessing |
+| 🏋️ **Model Training** | Configurable training with hyperparameter tuning |
+| 📊 **Model Evaluation** | Comprehensive metrics, cross-validation, and comparison |
+| 📦 **Model Registry** | Version control and management for trained models |
+| 🚀 **Model Deployment** | One-click deployment to REST API endpoints |
+| 📈 **Monitoring** | Real-time performance tracking and drift detection |
+| 🔬 **Experiment Tracking** | Full experiment logging with MLflow integration |
+
+---
+
+## 🏗️ Architecture
+
+```
+                                    ┌──────────────────┐
+                                    │   🌐 REST API    │
+                                    │    (FastAPI)     │
+                                    └────────┬─────────┘
+                                             │
+┌──────────────┐    ┌──────────────┐    ┌────▼─────────┐
+│  📁 Data     │───▶│  ⚙️ Feature  │───▶│  🤖 Model    │
+│   Sources    │    │   Store      │    │   Serving    │
+└──────────────┘    └──────────────┘    └──────────────┘
+       │                   │                    │
+       ▼                   ▼                    ▼
+┌─────────────────────────────────────────────────────┐
+│              🗄️ Artifact Store (S3/GCS)             │
+└─────────────────────────────────────────────────────┘
+       │                   │                    │
+       ▼                   ▼                    ▼
+┌─────────────────────────────────────────────────────┐
+│           📊 MLflow Tracking Server                 │
+└─────────────────────────────────────────────────────┘
 ```
 
 ---
 
-## **🚀 Recent Improvements**  
+## 🛠️ Tech Stack
 
-This project has been enhanced with the following improvements:
+### Core ML & Data
 
-### **🔧 Application Enhancements**
-- ✅ **Enhanced Error Handling** - Better error responses and graceful shutdown
-- ✅ **Health Check Endpoints** - `/health` endpoint for monitoring
-- ✅ **API Endpoints** - RESTful API at `/api/calculate` for programmatic access
-- ✅ **CORS Support** - Cross-origin resource sharing enabled
-- ✅ **Improved UI** - Better styling and user experience
-- ✅ **Graceful Shutdown** - Proper signal handling for container orchestration
+| Technology | Purpose |
+|------------|---------|
+| ![Python](https://img.shields.io/badge/Python-3776AB?style=flat&logo=python&logoColor=white) | Primary Language |
+| ![Scikit-learn](https://img.shields.io/badge/Scikit--learn-F7931E?style=flat&logo=scikit-learn&logoColor=white) | ML Algorithms |
+| ![Pandas](https://img.shields.io/badge/Pandas-150458?style=flat&logo=pandas&logoColor=white) | Data Manipulation |
+| ![NumPy](https://img.shields.io/badge/NumPy-013243?style=flat&logo=numpy&logoColor=white) | Numerical Computing |
 
-### **🐳 Docker & Security Improvements**
-- ✅ **Multi-stage Docker Build** - Optimized image size and security
-- ✅ **Non-root User** - Enhanced security with proper user permissions
-- ✅ **Health Checks** - Built-in container health monitoring
-- ✅ **Signal Handling** - Proper process management with dumb-init
+### MLOps & Tracking
 
-### **☸️ Kubernetes Enhancements**
-- ✅ **Liveness & Readiness Probes** - Better container health monitoring
-- ✅ **Security Context** - Enhanced security with non-root execution
-- ✅ **Resource Management** - Proper CPU and memory limits
-- ✅ **Rolling Updates** - Zero-downtime deployments
+| Technology | Purpose |
+|------------|---------|
+| ![MLflow](https://img.shields.io/badge/MLflow-0194E2?style=flat&logo=mlflow&logoColor=white) | Experiment Tracking |
+| ![DVC](https://img.shields.io/badge/DVC-945DD6?style=flat&logo=dvc&logoColor=white) | Data Version Control |
 
-### **🔄 CI/CD Pipeline**
-- ✅ **GitHub Actions Workflows** - Automated CI/CD with security scanning
-- ✅ **Multi-Node Testing** - Testing across Node.js 18.x and 20.x
-- ✅ **Security Scanning** - Trivy vulnerability scanning
-- ✅ **Code Quality** - ESLint integration and coverage reporting
+### Deployment & Infrastructure
 
-### **🛠️ Development Tools**
-- ✅ **Docker Compose** - Local development environment
-- ✅ **ESLint Configuration** - Code quality and consistency
-- ✅ **Comprehensive .gitignore** - Proper version control
-- ✅ **Nginx Configuration** - Local reverse proxy setup
+| Technology | Purpose |
+|------------|---------|
+| ![FastAPI](https://img.shields.io/badge/FastAPI-009688?style=flat&logo=fastapi&logoColor=white) | API Framework |
+| ![Docker](https://img.shields.io/badge/Docker-2496ED?style=flat&logo=docker&logoColor=white) | Containerization |
+| ![AWS](https://img.shields.io/badge/AWS-232F3E?style=flat&logo=amazon-aws&logoColor=white) | Cloud Platform |
 
 ---
 
-## **🔧 Prerequisites**  
+## 🔧 Tools Used
 
-Before you proceed, ensure you have the following installed:  
-
-- 🛠 **Node.js (>=18.x)**  
-- 🐳 **Docker & Docker Compose**  
-- 🏗️ **Terraform (>=1.0)**  
-- ☸ **kubectl (latest version)**  
-- 🎭 **Kustomize**  
-- ☁ **AWS CLI & eksctl**  
-- ⚙️ **GitHub Actions configured**  
-- 🔑 **AWS IAM permissions to manage EKS**  
+| Tool | Purpose |
+|------|---------|
+| ![Git](https://img.shields.io/badge/Git-F05032?style=flat&logo=git&logoColor=white) | Version Control |
+| ![GitHub Actions](https://img.shields.io/badge/GitHub_Actions-2088FF?style=flat&logo=github-actions&logoColor=white) | CI/CD Pipeline |
+| ![Jupyter](https://img.shields.io/badge/Jupyter-F37626?style=flat&logo=jupyter&logoColor=white) | Experimentation |
+| ![VS Code](https://img.shields.io/badge/VS_Code-007ACC?style=flat&logo=visual-studio-code&logoColor=white) | IDE |
+| ![Postman](https://img.shields.io/badge/Postman-FF6C37?style=flat&logo=postman&logoColor=white) | API Testing |
+| ![pytest](https://img.shields.io/badge/pytest-0A9EDC?style=flat&logo=pytest&logoColor=white) | Testing Framework |
 
 ---
 
-## **🏃‍♂️ Quick Start (Local Development)**  
+## 📦 Installation
 
-### **Option 1: Docker Compose (Recommended)**
+### Prerequisites
+
+- Python 3.9+
+- pip or conda
+- Docker (optional, for containerized deployment)
+
+### Steps
+
 ```bash
 # Clone the repository
-git clone https://github.com/NotHarshhaa/CI-CD_EKS-GitHub_Actions.git
-cd CI-CD_EKS-GitHub_Actions
+git clone https://github.com/armaan-arora/mlpipeline.git
 
-# Start the application with Docker Compose
-docker-compose up --build
+# Navigate to project directory
+cd mlpipeline
 
-# Access the application
-# Web UI: http://localhost:80
-# Health Check: http://localhost:80/health
-# API: POST http://localhost:80/api/calculate
-```
-
-### **Option 2: Local Node.js Development**
-```bash
-# Navigate to app directory
-cd app
+# Create virtual environment
+python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
 
 # Install dependencies
-npm install
+pip install -r requirements.txt
 
-# Run in development mode
-npm run dev
+# Set up environment variables
+cp .env.example .env
 
-# Run tests
-npm test
-
-# Run linting
-npm run lint
+# Initialize DVC (if using data versioning)
+dvc init
 ```
 
 ---
 
-## **⚙️ CI/CD Workflow**  
+## 🚀 Usage
 
-The **CI/CD pipeline** automates the entire deployment process using **GitHub Actions**.  
+### Training a Model
 
-### **🔨 Build Job**  
+```bash
+# Run the complete pipeline
+python main.py
 
-1️⃣ **Set Up the Environment**  
+# Or run individual components
+python src/data_ingestion.py
+python src/data_transformation.py
+python src/model_trainer.py
+python src/model_evaluation.py
+```
 
-- Install **Node.js dependencies** using `npm install`.  
-- Lint the code to ensure quality standards.  
+### Making Predictions
 
-2️⃣ **Run Tests**  
+```python
+from src.pipeline.predict_pipeline import PredictPipeline
 
-- Execute **unit tests** with `npm test`.  
-- Generate test reports for visibility.  
+pipeline = PredictPipeline()
+predictions = pipeline.predict(input_data)
+```
 
-3️⃣ **Version Management**  
+### Running the API
 
-- Uses **Semantic Versioning** (`major.minor.patch`).  
-- Auto-increments the version based on commit messages.  
+```bash
+# Start the FastAPI server
+uvicorn app:app --reload --host 0.0.0.0 --port 8000
 
-4️⃣ **Build & Push Docker Image**  
+# Test prediction endpoint
+curl -X POST "http://localhost:8000/predict" \
+  -H "Content-Type: application/json" \
+  -d '{"features": [1.2, 3.4, 5.6, 7.8]}'
+```
 
-- **Builds a Docker image** of the application.  
-- Pushes it to **Amazon Elastic Container Registry (ECR)**.  
+### Using Docker
 
----
+```bash
+# Build the image
+docker build -t mlpipeline .
 
-### **🚀 Deployment Job**  
-
-1️⃣ **Terraform Setup**  
-
-- Initializes Terraform with `terraform init`.  
-- Ensures correct **state management**.  
-
-2️⃣ **Infrastructure Provisioning**  
-
-- Executes `terraform plan` and `terraform apply`.  
-- Deploys EKS clusters, networking, and storage.  
-
-3️⃣ **Kubernetes Configuration**  
-
-- Configures `kubectl` to interact with the cluster.  
-- Applies `Kustomize` overlays for environment-specific settings.  
-
-4️⃣ **Ingress Controller Setup**  
-
-- Uses **Helm** to install **NGINX Ingress**.  
-
-5️⃣ **Application Deployment**  
-
-- Deploys the latest **Docker image** to Kubernetes.  
-- Exposes the service via **Ingress and Load Balancer**.  
+# Run the container
+docker run -p 8000:8000 mlpipeline
+```
 
 ---
 
-## **🏗️ Infrastructure Details**  
+## 📁 Project Structure
 
-| Environment | Instance Type | Replica Count |
-|-------------|--------------|---------------|
-| **Dev**     | `t3.small`    | 1             |
-| **Staging** | `t3.medium`   | 3             |
-| **Prod**    | `t3.large`    | 3             |
-
-✅ **DNS Automation via Cloudflare**  
-
-- Environment-specific subdomains:  
-  - `dev.example.com`  
-  - `staging.example.com`  
-  - `prod.example.com`  
-
----
-
-## **📦 Application Deployment Strategy**  
-
-This project supports **multiple deployment strategies**:  
-
-✅ **Rolling Updates** – Default strategy, ensuring zero downtime.  
-✅ **Blue-Green Deployment** – Used in production environments.  
-✅ **Canary Deployments** – Gradual rollout for safe updates.  
-
----
-
-## **🔄 GitOps Principles**  
-
-✔ **Git as the Source of Truth**  
-✔ **Declarative Infrastructure** (Terraform & Kubernetes)  
-✔ **Automated Deployments via GitHub Actions**  
-
-Every infrastructure change must be made via a **Git commit**.  
-
----
-
-## **🔒 Security Best Practices**  
-
-🔐 **Secrets Management**  
-
-- Uses **AWS Secrets Manager** & GitHub Actions **encrypted secrets**.  
-
-🛡 **Container Security**  
-
-- Uses **Trivy** and **Docker Bench Security** for vulnerability scanning.  
-
-🚧 **IAM & Least Privilege**  
-
-- Uses **AWS IAM roles** with restricted access.  
+```
+mlpipeline/
+├── 📂 src/
+│   ├── 📂 components/
+│   │   ├── data_ingestion.py
+│   │   ├── data_transformation.py
+│   │   ├── model_trainer.py
+│   │   └── model_evaluation.py
+│   ├── 📂 pipeline/
+│   │   ├── train_pipeline.py
+│   │   └── predict_pipeline.py
+│   ├── 📂 utils/
+│   │   └── common.py
+│   ├── exception.py
+│   └── logger.py
+├── 📂 config/
+│   └── config.yaml
+├── 📂 artifacts/
+│   ├── data/
+│   ├── models/
+│   └── reports/
+├── 📂 notebooks/
+│   └── EDA.ipynb
+├── 📂 tests/
+│   └── test_pipeline.py
+├── 📄 app.py
+├── 📄 main.py
+├── 📄 requirements.txt
+├── 📄 Dockerfile
+├── 📄 dvc.yaml
+└── 📄 README.md
+```
 
 ---
 
-## **📢 Notifications & Alerts**  
+## 🔮 Future Scope
 
-🔔 **Slack & Email Notifications**  
+The project has significant potential for enhancement:
 
-- **CI/CD Job Updates** – Pipeline status alerts.  
-- **DNS Updates** – Cloudflare integration for alerts.  
-
-📡 **Monitoring & Logging**  
-
-- **AWS CloudWatch** for logs & metrics.  
-- **Prometheus & Grafana** for observability.  
-
----
-
-## **📊 Monitoring & Logging**  
-
-✅ **Application Logs** – Aggregated using **Fluent Bit**.  
-✅ **Infrastructure Logs** – Stored in **AWS CloudWatch Logs**.  
-✅ **Metrics Monitoring** – Tracked using **Prometheus & Grafana**.  
+| Feature | Description | Priority |
+|---------|-------------|----------|
+| 🧠 **Deep Learning Support** | Add TensorFlow/PyTorch model training | High |
+| ☁️ **Multi-Cloud Deployment** | Support for AWS, GCP, and Azure | High |
+| 📊 **Advanced Monitoring** | Grafana dashboards and alerting | High |
+| 🔄 **AutoML Integration** | Automated model selection and tuning | Medium |
+| 🌊 **Streaming Pipelines** | Real-time data processing with Kafka | Medium |
+| 🎯 **A/B Testing** | Framework for model comparison in production | Medium |
+| 📱 **Edge Deployment** | Model optimization for edge devices | Low |
+| 🔐 **Model Security** | Adversarial robustness and encryption | Low |
+| 📚 **Feature Store** | Centralized feature management | Future |
 
 ---
 
-## **📜 Contributing**  
+## 📊 Model Performance
 
-Want to contribute? Here’s how:  
+| Metric | Score |
+|--------|-------|
+| **Accuracy** | 94.5% |
+| **Precision** | 93.2% |
+| **Recall** | 95.1% |
+| **F1 Score** | 94.1% |
+| **AUC-ROC** | 0.97 |
 
-1. **Fork the repository** & create a new branch.  
-2. Make your changes and **commit with a descriptive message**.  
-3. Open a **Pull Request (PR)** for review.  
-
----
-
-## **⭐ Support & Author**  
-
-## **⭐ Hit the Star!**  
-
-If you find this repository helpful and plan to use it for learning, please consider giving it a star ⭐. Your support motivates me to keep improving and adding more valuable content! 🚀  
+*Note: Update these metrics with your actual model performance*
 
 ---
 
-## 🛠️ **Author & Community**  
+## 🤝 Contributing
 
-This project is crafted with passion by **Armaan** 💡.  
+Contributions are welcome! Here's how you can help:
 
-I’d love to hear your feedback! Feel free to open an issue, suggest improvements, or just drop by for a discussion. Let’s build a strong DevOps community together!  
+1. 🍴 Fork the repository
+2. 🌿 Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. 💾 Commit your changes (`git commit -m 'Add amazing feature'`)
+4. 📤 Push to the branch (`git push origin feature/amazing-feature`)
+5. 🔃 Open a Pull Request
+
+### Development Guidelines
+
+- Follow PEP 8 style guide
+- Write unit tests for new features
+- Update documentation as needed
+- Use meaningful commit messages
 
 ---
 
+## 📄 License
 
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+---
+
+## 👤 Author
+
+**Armaan Arora**
+
+[![GitHub](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/armaan-arora)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://linkedin.com/in/armaan-arora)
+
+---
+
+## 🙏 Acknowledgements
+
+- [Scikit-learn](https://scikit-learn.org/) — Machine Learning library
+- [MLflow](https://mlflow.org/) — ML lifecycle management
+- [FastAPI](https://fastapi.tiangolo.com/) — Modern web framework
+
+---
+
+<p align="center">
+  ⭐ Star this repo if you found it helpful! ⭐
+</p>
+
+<p align="center">
+  Made with ❤️ and 🤖 by Armaan Arora
+</p>
