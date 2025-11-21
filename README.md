@@ -334,7 +334,7 @@ If you find this repository helpful and plan to use it for learning, please cons
 
 ## 🛠️ **Author & Community**  
 
-This project is crafted with passion by **[Harshhaa](https://github.com/NotHarshhaa)** 💡.  
+This project is crafted with passion by **Armaan** 💡.  
 
 I’d love to hear your feedback! Feel free to open an issue, suggest improvements, or just drop by for a discussion. Let’s build a strong DevOps community together!  
 
