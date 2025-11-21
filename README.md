@@ -340,16 +340,4 @@ I’d love to hear your feedback! Feel free to open an issue, suggest improvemen
 
 ---
 
-## 📧 **Let's Connect!**  
 
-Stay connected and explore more DevOps content with me:  
-
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-%230077B5.svg?style=for-the-badge&logo=linkedin&logoColor=white)](https://linkedin.com/in/harshhaa-vardhan-reddy)  [![GitHub](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/NotHarshhaa)  [![Telegram](https://img.shields.io/badge/Telegram-26A5E4?style=for-the-badge&logo=telegram&logoColor=white)](https://t.me/prodevopsguy)  [![Dev.to](https://img.shields.io/badge/Dev.to-0A0A0A?style=for-the-badge&logo=dev.to&logoColor=white)](https://dev.to/notharshhaa)  [![Hashnode](https://img.shields.io/badge/Hashnode-2962FF?style=for-the-badge&logo=hashnode&logoColor=white)](https://hashnode.com/@prodevopsguy)  
-
----
-
-## 📢 **Stay Updated!**  
-
-Want to stay up to date with the latest DevOps trends, best practices, and project updates? Follow me on my blogs and social channels!  
-
-![Follow Me](https://imgur.com/2j7GSPs.png)
